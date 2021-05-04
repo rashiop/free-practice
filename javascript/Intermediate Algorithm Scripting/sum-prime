@@ -1,0 +1,23 @@
+// https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/intermediate-algorithm-scripting/sum-all-primes
+
+function checkPrime(num) {
+  let isPrime = true;
+  for (let i=2; i<=Math.ceil(num/2); i++) {
+    if (num%i==0) {
+      isPrime= false;
+    }  
+  }
+  return isPrime;
+}
+
+function sumPrimes(num) {
+  let sum = 0;
+  for (let i=2; i<=num; i++) {
+    if (i<4 || checkPrime(i)) {
+      sum+= i;
+    }
+  }
+  return sum;
+}
+
+sumPrimes(977);
