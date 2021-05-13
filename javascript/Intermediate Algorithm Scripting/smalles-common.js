@@ -1,34 +1,36 @@
 // https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/intermediate-algorithm-scripting/smallest-common-multiple
 
-const getPower = (base, result) => {
-  const pow = Math.log(result) / Math.log(base)
-  return Math.floor(pow);
-}
-
-const mappedPrime = ([start, end]) => {
-  let prime = {};
-  for (let num=start; num<=end; num++) {
-    if (num<4) {
-      prime[num] = 1;
-    } else {
-      let flag = true;
-      for (let j=2; j<=Math.ceil(num/2); j++) {
-        if (num%j == 0) {
-          flag = false;
-          if (prime[j]) prime[j] = getPower(j, num)
-        }
-      }
-      if(flag) prime[num] = 1;
+function getPrimeFactors(num) {
+  let factors = {}
+  for (let prime=2; prime<=num; prime++) {
+    while(num%prime==0) {
+      num = num/prime;
+      factors[prime] = factors[prime] == null ? 1 : factors[prime] + 1
     }
   }
-  return prime;
+  return factors;
 }
 
 function smallestCommons(arr) {
   const [start, end] = arr;
   const range = start>end ? [end, start] : [start,end]
-  const prime = mappedPrime(range);
-  return Object.entries(prime).reduce((multi, [base, power]) => multi*(base**power), 1)
+  let primeFactors = {}
+  for(let i=range[0]; i<=range[1]; i++) {
+    const primes = getPrimeFactors(i)
+    for (let prime in primes) {
+      if (!primeFactors[prime] || primeFactors[prime] < primes[prime]) {
+        primeFactors[prime] = primes[prime]
+      }
+    }
+  }
+
+  
+  let common = 1;
+  for (let prime in primeFactors) {
+    common = common * (prime**primeFactors[prime])
+  }
+  return common
+  
 }
 
-smallestCommons([2, 10])
+console.log(smallestCommons([23, 18]))
